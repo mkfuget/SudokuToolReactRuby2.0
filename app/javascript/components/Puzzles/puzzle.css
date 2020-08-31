@@ -1,0 +1,44 @@
+  
+.BoardTable {
+    margin-left: 64px;
+}
+
+.BoardRow:first-child {
+    border-top: solid medium gray;
+}
+  
+.BoardRow:nth-child(3n) {
+    border-bottom: solid medium gray;
+}
+
+  .CellStyle:first-child {
+    border-left:solid medium gray;
+  }
+  .CellStyle:nth-child(3n) {
+    border-right:solid medium gray;
+  }
+  
+  .CellStyle {
+    border: 1px solid gray;
+    font-size: 16px;
+    height: 36px;
+    width: 36px;
+    text-align: center;
+  }
+  .CellStyle:focus {
+    outline: none;
+  }
+  
+  .kbd-navigation .square:focus {
+    background: #ddd;
+  }
+  
+  .game {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .game-info {
+    margin-left: 20px;
+  }
+  

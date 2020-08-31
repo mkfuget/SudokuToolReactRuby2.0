@@ -1,0 +1,39 @@
+.PuzzletypesTableHeader{
+    text-align: center;
+
+}
+
+.PuzzletypesTableSubheader{
+    text-align: center;
+
+}
+
+.PuzzleTypeTableRow{
+ border-bottom: 2px solid;
+ border-color: black;
+
+}
+.PuzzleTableEntryRow{
+    margin-left: 20px;
+
+    text-align: left;
+    border-color: black;
+    vertical-align: middle;
+
+    background-color:#e4eaf5;
+
+}
+
+.PuzzleTableEntryRow:nth-of-type(2n){
+    background-color:#a6c8ff;
+}
+.PuzzleTableEntryData{
+    
+    height: 30px;
+    text-align: left;
+    vertical-align: middle;
+    border: 1px solid;
+    border-color: white;
+}
+
+

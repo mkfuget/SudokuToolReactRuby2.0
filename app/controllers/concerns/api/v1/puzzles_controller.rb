@@ -1,0 +1,48 @@
+module Api
+    module V1
+        class PuzzlesController < ApplicationController
+            protect_from_forgery with: :null_session,
+            if: Proc.new { |c| c.request.format =~ %r{application/json} }
+      
+            def index
+                puzzles = Puzzle.all
+                
+                render json: PuzzleSerializer.new(puzzles).serialized_json
+            end
+
+            def show
+                puzzle = Puzzle.find_by(params[:slug])
+                
+                render json: PuzzleSerializer.new(puzzle).serialized_json
+            end
+
+
+            def create
+                puzzle = Puzzle.new(puzzle_params)
+
+                if puzzle.save
+                    render json: PuzzleSerializer.new(puzzle).serialized_json
+                else
+                    render json: { error: puzzle.errors.messages}, status: 422
+                end
+            end
+
+            def destory
+                puzzle = Puzzle.find_by(params[:slug])
+
+
+                if puzzle.destory
+                    head :no_content
+                else
+                    render json: { error: puzzle.errors.messages}, status: 422
+                end
+            end
+
+            private
+
+            def puzzle_params
+                params.require(:puzzle).permit(:name, :author, :ratingsum, :numratings, :data, :Puzzletype_id)
+            end
+        end
+    end
+end

@@ -142,7 +142,7 @@ puzzles = Puzzle.create([
         difficulty: "3",
         data: "..8.7.1..12..9..54.....3.2.6.4.1..8953.78..1...9.623...8..4.6.7..75.6...4..8....2",
         Puzzletype: puzzletypes[3]
-    },
+    }
 
 
 ])

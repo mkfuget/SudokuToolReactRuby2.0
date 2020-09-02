@@ -33,35 +33,6 @@ const PuzzletypeTableEntry = (props) => {
         )
     })
     
-    if(visiblePuzzles)
-    {
-        return (
-            <Fragment>
-                    <Row className = "PuzzleTypeTableRow">
-                        <Col className = "puzzletypeTableData">
-                            <Button variant="outline-primary" onClick ={() =>
-                                setVisiblePuzzles(!visiblePuzzles)
-                            } 
-                            >-</Button>
-                            {props.attributes.name}
-                        </Col>
-                    </Row>
-                    <Row className = "PuzzleTypeDescriptionDow">
-                        {props.attributes.description}
-                    </Row>
-                    <Row className = "puzzlesTableHeaders">
-                        <Col className = "puzzlesTableHeaderData">Title</Col>
-                        <Col className = "puzzlesTableHeaderData">Author</Col>
-                        <Col className = "puzzlesTableHeaderData">Difficulty</Col>
-                    </Row>
-                    <Container>
-                        {table}
-                    </Container>
-                </Fragment>
-        )
-    }
-    else 
-    {
         return (
             <Fragment>
                 <Row className = "PuzzleTypeTableRow">
@@ -69,25 +40,36 @@ const PuzzletypeTableEntry = (props) => {
                         <Button variant="outline-primary" onClick ={() =>
                             setVisiblePuzzles(!visiblePuzzles)
                         } 
-                        >+</Button>
+                        >-</Button>
                         {props.attributes.name}
                     </Col>
                 </Row>
-                <Row className = "PuzzleTypeDescriptionDow">
-                        {props.attributes.description}
-                </Row>
+                {visiblePuzzles==true && 
+                    <Fragment>
+                        <Row className = "PuzzleTypeDescriptionDow">
+                            {props.attributes.description}
+                            </Row>
+                            <Row className = "puzzlesTableHeaders">
+                                <Col className = "puzzlesTableHeaderData">Title</Col>
+                                <Col className = "puzzlesTableHeaderData">Author</Col>
+                                <Col className = "puzzlesTableHeaderData">Difficulty</Col>
+                            </Row>
+                            <Container>
+                                {table}
+                            </Container>
+                        </Fragment>
+                    }
             </Fragment>
-    )
 
-    }
-    
-}
+        )
+    }    
+
 
 const PuzzleTableEntry = (props) => {
     return (
             <Row className = "PuzzleTableEntryRow">
                 <Col className = "PuzzleTableEntryData">
-                        <Link to={"/puzzle/"+props.attributes.slug}>{props.attributes.name}</Link>
+                        <Link to={"/puzzles/"+props.attributes.slug}>{props.attributes.name}</Link>
                 </Col>
                 <Col className = "PuzzleTableEntryData">{props.attributes.author}</Col>
                 <Col className = "PuzzleTableEntryData">{props.attributes.difficulty}</Col>

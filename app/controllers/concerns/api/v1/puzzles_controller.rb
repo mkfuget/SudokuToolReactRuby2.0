@@ -11,7 +11,7 @@ module Api
             end
 
             def show
-                puzzle = Puzzle.find_by(params[:slug])
+                puzzle = Puzzle.where(slug: params[:slug])
                 
                 render json: PuzzleSerializer.new(puzzle).serialized_json
             end
@@ -28,7 +28,7 @@ module Api
             end
 
             def destory
-                puzzle = Puzzle.find_by(params[:slug])
+                puzzle = Puzzle.find_by(slug: params[:slug])
 
 
                 if puzzle.destory
@@ -41,7 +41,7 @@ module Api
             private
 
             def puzzle_params
-                params.require(:puzzle).permit(:name, :author, :ratingsum, :numratings, :data, :Puzzletype_id)
+                params.require(:puzzle).permit(:name, :author, :difficulty, :ratingsum, :numratings, :data, :Puzzletype_id)
             end
         end
     end

@@ -17,7 +17,7 @@ const App = () => {
             <HeaderPane/>
             <Switch>
                 <Route exact path="/" component={Puzzletype}/>
-                <Route exact path="/puzzle/:slug" component={Puzzle}/>
+                <Route exact path="/puzzles/:slug" component={Puzzle}/>
 
             </Switch>
         </React.Fragment>

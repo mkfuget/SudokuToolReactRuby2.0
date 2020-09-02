@@ -4,10 +4,11 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import "./puzzle.css"
+import {useSelector} from 'react-redux'
+
 const BOARD_WIDTH = 9;
 const SQUARE_WIDTH = 3;
 const BOARD_SQUARES = 81;
-
 var currentIndex = -1;
 
 function SudokuCell(props) {
@@ -28,13 +29,17 @@ function SudokuCell(props) {
   
   function Board(props) {
 
+
+    console.log(props.attributes[0].attributes.data);
     const orange = [255, 102, 0];
     const red = [255, 0, 0];
     const green = [0, 255, 0];
     const cellColorBlue = 'rgba(0, 153, 255, 0.1)';
     const cellColorWhite = 'white';
     var highlightColor = 'rgba(0, 153, 255, 0.1)';
-    const initialState = props.attributes.data;
+    const puzzleDatabsePull = props.attributes[0].attributes;
+    const initialState = props.attributes[0].attributes.data;
+    const puzzleType = puzzleDatabsePull.Puzzletype_id;
 
     const [boardData, setBoard] = useState(Array(BOARD_SQUARES).fill(-1));
     const [boardHeapIndex, setBoardHeapIndex] = useState(Array(BOARD_SQUARES));
@@ -68,8 +73,7 @@ function SudokuCell(props) {
 
     const [boardSudokuCells, setSudokuCells] = useState(initialBoardState);
     const [cellColors, setCellColors] = useState(Array(BOARD_SQUARES).fill("background:background-color:rgba(255,0,0,0.3)"));
-    
-    function isPlacable(currentIndex, currentNumber, testIndex, testNumber)
+    function isPlacableClassicSudoku(currentIndex, currentNumber, testIndex, testNumber)
     {
         var currentSquare = indexToSquare(currentIndex);
         var currentCol = indexToCol(currentIndex);
@@ -81,19 +85,70 @@ function SudokuCell(props) {
 
         if(currentCol==testCol && currentNumber == testNumber)
         {
-            return 0;
+            return false;
         }
         if(currentRow==testtRow && currentNumber == testNumber)
         {
-            return 0;
+            return false;
         }
         if(currentSquare==testSquare && currentNumber == testNumber)
         {
-            return 0;
+            return false;
         }
-        return 1;
+        return true;
 
     }
+
+    function isPlaceableCrossSudoku(currentIndex, currentNumber, testIndex, testNumber)
+    {
+        if(!isPlacableClassicSudoku(currentIndex, currentNumber, testIndex, testNumber))
+        {
+            return false;
+        }
+
+        if(indexToCol(currentIndex)-indexToRow(currentIndex)===0 && indexToCol(testIndex)-indexToRow(testIndex===0))//determines if both entries are on the up and right diagonal
+        {
+            return false;
+        }
+        
+        if(indexToCol(currentIndex)-indexToRow(currentIndex)===0 && indexToCol(testIndex)-indexToRow(testIndex===0))//determines if both entries are on the down and right diagonal
+        {
+            return false;
+        }
+        return true;
+
+    }
+    
+    function isPlacableMiracleSudoku(currentIndex, currentNumber, testIndex, testNumber)
+    {
+        return false;
+    }
+
+    function isPlacable(currentIndex, currentNumber, testIndex, testNumber)
+    {
+        switch(puzzleType){
+            case 1:
+                return isPlacableClassicSudoku(currentIndex, currentNumber, testIndex, testNumber);
+                break;
+            case 2:
+                return isPlacableClassicSudoku(currentIndex, currentNumber, testIndex, testNumber);
+                break;
+            case 3:
+                return isPlacableClassicSudoku(currentIndex, currentNumber, testIndex, testNumber);
+                break;
+            case 4:
+                return isPlaceableCrossSudoku(currentIndex, currentNumber, testIndex, testNumber);
+                break;
+            case 5:
+                return isPlacableMiracleSudoku(currentIndex, currentNumber, testIndex, testNumber);
+                 break;
+                           
+        }
+
+        return false;
+    }
+
+
     function addEntry(index, number)
     {
         if(boardBlocks[index][number]>0)//placement not allowed on this square
@@ -469,7 +524,6 @@ function SudokuCell(props) {
     const handleKeyDown = e =>
     {
 
-        lightUpSquares(orange, 0);
         if(e.key >= 0 && e.key < 9)
         {
             var number = parseInt(e.key);
@@ -639,6 +693,7 @@ const Puzzle = (props) => {
         console.log(props)
         axios.get(url)
         .then( resp => {
+            console.log(resp.data)
             setCurrentPuzzleFromDatabase(resp.data)
             setLoaded(true)
         })
@@ -648,7 +703,7 @@ const Puzzle = (props) => {
    console.log(currentPuzzleFromDatabase.data);
    if(loaded)
    {
-       return <Board attributes={currentPuzzleFromDatabase.data.attributes} />
+       return <Board attributes={currentPuzzleFromDatabase.data} />
    }
    else
    {

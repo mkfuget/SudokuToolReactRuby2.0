@@ -25,9 +25,7 @@
     width: 36px;
     text-align: center;
   }
-  .CellStyle:focus {
-    outline: none;
-  }
+
   
   .kbd-navigation .square:focus {
     background: #ddd;

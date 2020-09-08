@@ -126,23 +126,38 @@ puzzles = Puzzle.create([
         name: "Classic Hard 1",
         author: "MKFuget",
         difficulty: "3",
-        data: "....6.28.7.9..1...86.32..749...4.51...719.34...3..6..2..297....3..8..9.55......21",
-        Puzzletype: puzzletypes[3]
+        data: "4..9..86......72...3.25.....17..5.29.9...6....6.....7....4..5..7.....9......624..",
+        Puzzletype: puzzletypes[2]
     },
     {
         name: "Classic Hard 2",
         author: "MKFuget",
         difficulty: "3",
         data: "..43.....89.2..67.7..9...5.5....814..7..32.6.6....13.8..175.9....5.4..1298...6..5",
-        Puzzletype: puzzletypes[3]
+        Puzzletype: puzzletypes[2]
     },
     {
         name: "Classic Hard 3",
         author: "MKFuget",
         difficulty: "3",
         data: "..8.7.1..12..9..54.....3.2.6.4.1..8953.78..1...9.623...8..4.6.7..75.6...4..8....2",
-        Puzzletype: puzzletypes[3]
+        Puzzletype: puzzletypes[2]
+    },
+    {
+        name: "Cross Sudoku 1",
+        author: "MKFuget",
+        difficulty: "3",
+        data: ".................................................................................",
+        Puzzletype: puzzletypes[4]
+    },
+    {
+        name: "Miracle Sudoku 1",
+        author: "MKFuget",
+        difficulty: "3",
+        data: ".................................................................................",
+        Puzzletype: puzzletypes[5]
     }
+
 
 
 ])

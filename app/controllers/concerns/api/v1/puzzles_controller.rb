@@ -41,7 +41,7 @@ module Api
             private
 
             def puzzle_params
-                params.require(:puzzle).permit(:name, :author, :difficulty, :ratingsum, :numratings, :data, :Puzzletype_id)
+                params.require(:puzzle).permit(:name, :author, :difficulty, :ratingsum, :numratings, :data, :puzzletype_id)
             end
         end
     end

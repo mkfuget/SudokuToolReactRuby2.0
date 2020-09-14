@@ -186,7 +186,7 @@ const Board = (props) => {
 const PuzzleInner = (props) => {
    
     const initialState = props.puzzleDatabasePull.data;
-    const puzzleType = props.puzzleDatabasePull.Puzzletype_id;
+    const puzzleType = props.puzzleDatabasePull.puzzletype_id;
     var currentBoard = new BoardData(initialState, puzzleType);
     const initialRenderArray = Array(BOARD_SQUARES).fill(0);
     for(var i=0; i<BOARD_SQUARES; i++)
@@ -275,8 +275,21 @@ const PuzzleInner = (props) => {
             var numberAdded = solutionOrder[timeStep].number;
 
             const currentRenderData = [...boardRenderData];
+
+
             for(var i=0; i<BOARD_SQUARES; i++)
             {
+                if(stepTaken === 'Added')
+                {
+                    currentRenderData[i].flashColor = CELL_COLOR_GREEN;
+                    currentRenderData[flashIndex].boardSudokuCells = numberAdded;
+                }
+                else if(stepTaken === 'Removed')//TODO
+                {
+                    currentRenderData[i].flashColor = CELL_COLOR_RED;
+                    currentRenderData[flashIndex].boardSudokuCells = -1;
+                }
+    
                 if(i===flashIndex)
                 {
                     currentRenderData[i].flashOn = true;
@@ -287,16 +300,6 @@ const PuzzleInner = (props) => {
                 }
             }
 
-            if(stepTaken === 'Added')
-            {
-                currentRenderData[flashIndex].flashColor = CELL_COLOR_GREEN;
-                currentRenderData[flashIndex].boardSudokuCells = numberAdded;
-            }
-            else if(stepTaken === 'Removed')//TODO
-            {
-                currentRenderData[flashIndex].flashColor = CELL_COLOR_RED;
-                currentRenderData[flashIndex].boardSudokuCells = -1;
-            }
             setBoardRenderData(currentRenderData);
             timeStep++;
             if(timeStep>solutionOrder.length)

@@ -100,19 +100,19 @@ export default class BoardData{
     isPlacable(currentIndex, currentNumber, testIndex, testNumber)
     {
         switch(this.puzzleType){
-            case 1:
+            case 16:
                 return this.isPlacableClassicSudoku(currentIndex, currentNumber, testIndex, testNumber);
                 break;
-            case 2:
+            case 17:
                 return this.isPlacableClassicSudoku(currentIndex, currentNumber, testIndex, testNumber);
                 break;
-            case 3:
+            case 18:
                 return this.isPlacableClassicSudoku(currentIndex, currentNumber, testIndex, testNumber);
                 break;
-            case 4:
+            case 19:
                 return this.isPlaceableCrossSudoku(currentIndex, currentNumber, testIndex, testNumber);
                 break;
-            case 5:
+            case 20:
                 return this.isPlacableMiracleSudoku(currentIndex, currentNumber, testIndex, testNumber);
                  break;
                            

@@ -1,5 +1,5 @@
 class Puzzle < ApplicationRecord
-  belongs_to :Puzzletype
+  belongs_to :puzzletype
     
   before_create :slugify
     

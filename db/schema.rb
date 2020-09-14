@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 2020_08_26_164319) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "puzzles", force: :cascade do |t|
     t.string "name"
     t.string "author"
@@ -20,10 +23,10 @@ ActiveRecord::Schema.define(version: 2020_08_26_164319) do
     t.string "difficulty"
     t.string "data"
     t.string "slug"
-    t.integer "Puzzletype_id", null: false
+    t.bigint "puzzletype_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["Puzzletype_id"], name: "index_puzzles_on_Puzzletype_id"
+    t.index ["puzzletype_id"], name: "index_puzzles_on_puzzletype_id"
   end
 
   create_table "puzzletypes", force: :cascade do |t|
@@ -34,5 +37,5 @@ ActiveRecord::Schema.define(version: 2020_08_26_164319) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  add_foreign_key "puzzles", "Puzzletypes"
+  add_foreign_key "puzzles", "puzzletypes"
 end

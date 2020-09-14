@@ -8,7 +8,7 @@ class CreatePuzzles < ActiveRecord::Migration[6.0]
       t.string :difficulty
       t.string :data
       t.string :slug
-      t.belongs_to :Puzzletype, null: false, foreign_key: true
+      t.belongs_to :puzzletype, null: false, foreign_key: true
 
       t.timestamps
     end

@@ -1,7 +1,7 @@
 import React, {useState, useEffect, Fragment} from 'react'
 import { BrowserRouter as Router, Link } from 'react-router-dom'
 import axios from 'axios'
-import './Puzzletype.css'
+import './Puzzletype.scss'
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';

@@ -3,7 +3,7 @@ import axios from 'axios'
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import "./puzzle.scss"
+import "./puzzle.css"
 import {useSelector} from 'react-redux'
 import {useSpring, animated} from 'react-spring'
 import BoardData from '../functional/BoardData'

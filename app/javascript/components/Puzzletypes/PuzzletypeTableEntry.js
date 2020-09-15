@@ -9,6 +9,7 @@ import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
 
 
+
 const PuzzletypeTableEntry = (props) => {
 
     const [visiblePuzzles, setVisiblePuzzles] = useState(false)

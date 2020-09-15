@@ -5,7 +5,23 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
+const puzzleTableHeader = styled.div`
+    text-align: center;
+
+`
+
+
+const PuzzletypesTableSubheader = style.div`
+    text-align: center;
+`
+
+
+
+
 const Puzzletype = () => {
+
+
+    
     const [puzzletypes, setPuzzletypes] = useState([])
     useEffect(()=>{
         axios.get('api/v1/puzzletypes.json')
@@ -27,10 +43,12 @@ const Puzzletype = () => {
 
     return (
         <div className = "Puzzletypesview">
-            <div className = "PuzzletypesTableHeader">
+            <puzzleTableHeader>
                 <h1>Sudoku Puzzles</h1>
-                <div className = "PuzzletypesTableSubheader">Choose from a variety of interactive sudoku puzzles, options for all skill levels</div> 
-            </div>
+                    <PuzzletypesTableSubheader>
+                        Choose from a variety of interactive sudoku puzzles, options for all skill levels
+                    </PuzzletypesTableSubheader> 
+            </puzzleTableHeader>
             <Container className = "puzzletypeTable">
                 {table}
             </Container>

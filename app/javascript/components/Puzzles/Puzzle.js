@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 import {useSelector} from 'react-redux'
 import {useSpring, animated} from 'react-spring'
 import BoardData from '../functional/BoardData'
+import styled from 'styled-components'
 
 const BOARD_WIDTH = 9;
 const SQUARE_WIDTH = 3;
@@ -17,6 +18,35 @@ const CELL_COLOR_GREEN = [0, 255, 0];
 const CELL_COLOR_BLUE = 'rgba(0, 153, 255, 0.1)';
 const CELL_COLOR_WHITE = 'white';
 var highlightColor = 'rgba(0, 153, 255, 0.1)';
+
+const CellStyle = styled(animated.td)`
+
+    border: 1px solid gray;
+    font-size: 16px;
+    height: 36px;
+    width: 36px;
+    text-align: center;
+    &: first-child {
+        border-left:solid medium gray;
+    }
+    &:nth-child(3n) {
+        border-right:solid medium gray;
+    }
+
+`
+
+const BoardRow = styled.tr`
+    &: first-child {
+        border-top:solid medium gray;
+    }
+    &:nth-child(3n) {
+        border-bottom:solid medium gray;
+    }
+`
+
+const BoardTable = styled.table`
+    margin-left: 80px;
+`
 
 function SudokuCell(props) {
     const colorOut = 'rgba('+props.flashColor+', 0)';
@@ -38,20 +68,20 @@ function SudokuCell(props) {
     return ( 
         <Fragment>
         {props.flashOn 
-            ? <animated.td 
+            ? <CellStyle 
                 style = {flashSquare}
                 className= "CellStyle"
                 onClick={props.onClick}
         >
                 {props.value!==0 ? props.value : ""}
-            </animated.td>
-            : <td 
+            </CellStyle>
+            : <CellStyle 
                 style = {{backgroundColor:props.cellColor}}
                 className= "CellStyle"
                 onClick={props.onClick}
             >
                 {props.value!==0 ? props.value : ""}
-            </td>
+            </CellStyle>
         }
         </Fragment>
     )
@@ -75,9 +105,9 @@ const Board = (props) => {
     }
 
     return (
-        <table className = "BoardTable">
+        <BoardTable>
             <tbody>
-                <tr className = "BoardRow">
+                <BoardRow>
                     {renderSquare(0)}
                     {renderSquare(1)}
                     {renderSquare(2)}
@@ -87,8 +117,8 @@ const Board = (props) => {
                     {renderSquare(6)}
                     {renderSquare(7)}
                     {renderSquare(8)}
-                </tr>
-                <tr className = "BoardRow">
+                </BoardRow>
+                <BoardRow>
                     {renderSquare(9)}
                     {renderSquare(10)}
                     {renderSquare(11)}
@@ -98,8 +128,8 @@ const Board = (props) => {
                     {renderSquare(15)}
                     {renderSquare(16)}
                     {renderSquare(17)}
-                </tr>
-                <tr className = "BoardRow">
+                </BoardRow>
+                <BoardRow>
                     {renderSquare(18)}
                     {renderSquare(19)}
                     {renderSquare(20)}
@@ -109,8 +139,8 @@ const Board = (props) => {
                     {renderSquare(24)}
                     {renderSquare(25)}
                     {renderSquare(26)}
-                </tr>
-                <tr className = "BoardRow">
+                </BoardRow>
+                <BoardRow>
                     {renderSquare(27)}
                     {renderSquare(28)}
                     {renderSquare(29)}
@@ -120,8 +150,8 @@ const Board = (props) => {
                     {renderSquare(33)}
                     {renderSquare(34)}
                     {renderSquare(35)}
-                </tr>
-                <tr className = "BoardRow">
+                </BoardRow>
+                <BoardRow>
                     {renderSquare(36)}
                     {renderSquare(37)}
                     {renderSquare(38)}
@@ -131,8 +161,8 @@ const Board = (props) => {
                     {renderSquare(42)}
                     {renderSquare(43)}
                     {renderSquare(44)}
-                </tr>
-                <tr className = "BoardRow">
+                </BoardRow>
+                <BoardRow>
                     {renderSquare(45)}
                     {renderSquare(46)}
                     {renderSquare(47)}
@@ -142,8 +172,8 @@ const Board = (props) => {
                     {renderSquare(51)}
                     {renderSquare(52)}
                     {renderSquare(53)}
-                </tr>
-                <tr className = "BoardRow">
+                </BoardRow>
+                <BoardRow>
                     {renderSquare(54)}
                     {renderSquare(55)}
                     {renderSquare(56)}
@@ -153,8 +183,8 @@ const Board = (props) => {
                     {renderSquare(60)}
                     {renderSquare(61)}
                     {renderSquare(62)}
-                </tr>
-                <tr className = "BoardRow">
+                </BoardRow>
+                <BoardRow>
                     {renderSquare(63)}
                     {renderSquare(64)}
                     {renderSquare(65)}
@@ -164,8 +194,8 @@ const Board = (props) => {
                     {renderSquare(69)}
                     {renderSquare(70)}
                     {renderSquare(71)}
-                </tr>
-                <tr className = "BoardRow">
+                </BoardRow>
+                <BoardRow>
                     {renderSquare(72)}
                     {renderSquare(73)}
                     {renderSquare(74)}
@@ -175,9 +205,9 @@ const Board = (props) => {
                     {renderSquare(78)}
                     {renderSquare(79)}
                     {renderSquare(80)}
-                </tr>
+                </BoardRow>
             </tbody>
-        </table>
+        </BoardTable>
     );
 }
 

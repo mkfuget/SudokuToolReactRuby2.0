@@ -1,17 +1,50 @@
 import React, {useState, useEffect, Fragment} from 'react'
 import { BrowserRouter as Router, Link } from 'react-router-dom'
 import axios from 'axios'
-import './Puzzletype.css'
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
+import styled from 'styled-components'
 
+const PuzzleTypeHeaderRow = styled.tr`
+    height: 40px;
+`
+const PuzzleTypeHeaderData = styled.td`
+    padding-top: 800px;
+    text-algin: top;
+`
+const PuzzleTypeDescriptionRow = styled.tr`
+    border-bottom: 2px solid;
+    border-color: black;
+`
+const PuzzleTypeDescriptionData = styled.td`
+    border-bottom: 2px solid;
+    border-color: black;
 
+`
+
+const PuzzleTableHeaderData = styled.td`
+    width: 200px;
+    height: 30px;
+    text-align: left;
+    vertical-align: middle;
+    border: 1px solid;
+    border-color: white;
+`
+
+const PuzzleTableEntryData = styled.td`
+    width: 200px;
+    height: 30px;
+    text-align: left;
+    vertical-align: middle;
+    border: 1px solid;
+    border-color: white;
+`
 
 const PuzzletypeTableEntry = (props) => {
-
+       
     const [visiblePuzzles, setVisiblePuzzles] = useState(false)
     const [puzzleTableEntryData, setPuzzleTableEntryData] = useState([])
     const currentPuzzleAddress = `api/v1/puzzletypes/${props.attributes.slug}.json`
@@ -25,7 +58,7 @@ const PuzzletypeTableEntry = (props) => {
          .catch ( resp => console.log(resp))
     }, [puzzleTableEntryData.length])
     
-    const table = puzzleTableEntryData.map( item => {
+    const allPuzzlesInType = puzzleTableEntryData.map( item => {
         return (
             <PuzzleTableEntry 
                 key={item.attributes.name}
@@ -36,29 +69,35 @@ const PuzzletypeTableEntry = (props) => {
     
         return (
             <Fragment>
-                <Row className = "PuzzleTypeTableRow">
-                    <Col className = "puzzletypeTableData">
+                <PuzzleTypeHeaderRow>
+                    <PuzzleTableHeaderData>
                         <Button variant="outline-primary" onClick ={() =>
                             setVisiblePuzzles(!visiblePuzzles)
                         } 
-                        >-</Button>
+                        >
+                        {visiblePuzzles 
+                            ? '-'
+                            : '+'
+                        }
+                        </Button>
                         {props.attributes.name}
-                    </Col>
-                </Row>
+                    </PuzzleTableHeaderData>
+                </PuzzleTypeHeaderRow>
+
+                <PuzzleTypeDescriptionRow>
+                    <PuzzleTypeDescriptionData>
+                        {props.attributes.description}
+                    </PuzzleTypeDescriptionData>
+                </PuzzleTypeDescriptionRow>
                 {visiblePuzzles==true && 
-                    <Fragment>
-                        <Row className = "PuzzleTypeDescriptionDow">
-                            {props.attributes.description}
-                            </Row>
-                            <Row className = "puzzlesTableHeaders">
-                                <Col className = "puzzlesTableHeaderData">Title</Col>
-                                <Col className = "puzzlesTableHeaderData">Author</Col>
-                                <Col className = "puzzlesTableHeaderData">Difficulty</Col>
-                            </Row>
-                            <Container>
-                                {table}
-                            </Container>
-                        </Fragment>
+                    <table>
+                            <tr className = "puzzlesTableHeaders">
+                                <PuzzleTableHeaderData>Title</PuzzleTableHeaderData>
+                                <PuzzleTableHeaderData>Author</PuzzleTableHeaderData>
+                                <PuzzleTableHeaderData>Difficulty</PuzzleTableHeaderData>
+                            </tr>
+                            {allPuzzlesInType}
+                        </table>
                     }
             </Fragment>
 
@@ -67,14 +106,15 @@ const PuzzletypeTableEntry = (props) => {
 
 
 const PuzzleTableEntry = (props) => {
+
     return (
-            <Row className = "PuzzleTableEntryRow">
-                <Col className = "PuzzleTableEntryData">
+            <tr className = "PuzzleTableEntryRow">
+                <td className = "PuzzleTableEntryData">
                         <Link to={"/puzzles/"+props.attributes.slug}>{props.attributes.name}</Link>
-                </Col>
-                <Col className = "PuzzleTableEntryData">{props.attributes.author}</Col>
-                <Col className = "PuzzleTableEntryData">{props.attributes.difficulty}</Col>
-            </Row>
+                </td>
+                <PuzzleTableEntryData>{props.attributes.author}</PuzzleTableEntryData>
+                <PuzzleTableEntryData>{props.attributes.difficulty}</PuzzleTableEntryData>
+            </tr>
 
     )
 }

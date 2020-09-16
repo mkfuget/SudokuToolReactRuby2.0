@@ -4,17 +4,21 @@ import axios from 'axios'
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import styled from 'styled-compnents'
-const puzzleTableHeader = styled.div`
+import styled from 'styled-components'
+
+const PuzzleTableHeader = styled.div`
     text-align: center;
 
 `
 
-
-const PuzzletypesTableSubheader = style.div`
+const PuzzletypesTableSubheader = styled.div`
     text-align: center;
 `
 
+const PuzzleTable = styled.div`
+    padding: 100px;
+    width:800px;
+`
 
 
 
@@ -32,7 +36,7 @@ const Puzzletype = () => {
          .catch ( resp => console.log(resp))
     }, [puzzletypes.length])
 
-    const table = puzzletypes.map( item => {
+    const allPuzzleTypes = puzzletypes.map( item => {
         return (
             <PuzzletypeTableEntry 
                 key={item.attributes.name}
@@ -43,15 +47,17 @@ const Puzzletype = () => {
 
     return (
         <div className = "Puzzletypesview">
-            <puzzleTableHeader>
+            <PuzzleTableHeader>
                 <h1>Sudoku Puzzles</h1>
                     <PuzzletypesTableSubheader>
                         Choose from a variety of interactive sudoku puzzles, options for all skill levels
                     </PuzzletypesTableSubheader> 
-            </puzzleTableHeader>
-            <Container className = "puzzletypeTable">
-                {table}
-            </Container>
+            </PuzzleTableHeader>
+            <table>
+                <tbody>
+                    {allPuzzleTypes}
+                </tbody>
+            </table>
         </div>
     )
 }

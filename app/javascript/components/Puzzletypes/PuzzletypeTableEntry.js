@@ -90,14 +90,18 @@ const PuzzletypeTableEntry = (props) => {
                     </PuzzleTypeDescriptionData>
                 </PuzzleTypeDescriptionRow>
                 {visiblePuzzles==true && 
+                    <tr>
                     <table>
+                        <tbody>
                             <tr className = "puzzlesTableHeaders">
                                 <PuzzleTableHeaderData>Title</PuzzleTableHeaderData>
                                 <PuzzleTableHeaderData>Author</PuzzleTableHeaderData>
                                 <PuzzleTableHeaderData>Difficulty</PuzzleTableHeaderData>
                             </tr>
-                            {allPuzzlesInType}
+                                {allPuzzlesInType}
+                            </tbody>
                         </table>
+                        </tr>
                     }
             </Fragment>
 

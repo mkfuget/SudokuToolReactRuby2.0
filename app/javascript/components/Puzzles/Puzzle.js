@@ -3,21 +3,26 @@ import axios from 'axios'
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import {useSelector} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
 import {useSpring, animated} from 'react-spring'
 import BoardData from '../functional/BoardData'
 import styled from 'styled-components'
+import ADD_TO_BOARD_SUCESSFUL from '../ActionCreators';
+import store from '../../packs/index.jsx'
+
 
 const BOARD_WIDTH = 9;
 const SQUARE_WIDTH = 3;
 const BOARD_SQUARES = 81;
 var currentIndex = -1;
+
 const CELL_COLOR_ORANGE = [255, 122, 0];
 const CELL_COLOR_RED = [255, 0, 0];
 const CELL_COLOR_GREEN = [0, 255, 0];
 const CELL_COLOR_BLUE = 'rgba(0, 153, 255, 0.1)';
 const CELL_COLOR_WHITE = 'white';
 var highlightColor = 'rgba(0, 153, 255, 0.1)';
+
 
 const CellStyle = styled(animated.td)`
 
@@ -48,7 +53,7 @@ const BoardTable = styled.table`
     margin-left: 80px;
 `
 
-function SudokuCell(props) {
+const SudokuCell = (props) => {
     const colorOut = 'rgba('+props.flashColor+', 0)';
     const colorIn = 'rgba('+props.flashColor+', 0.7)';
 
@@ -212,8 +217,9 @@ const Board = (props) => {
 }
 
 
-const PuzzleInner = (props) => {
-   
+function PuzzleInner(props) {
+
+    const dispatch = useDispatch();
     const initialState = props.puzzleDatabasePull.data;
     const puzzleType = props.puzzleDatabasePull.puzzletype_id;
     var currentBoard = new BoardData(initialState, puzzleType);
@@ -228,11 +234,15 @@ const PuzzleInner = (props) => {
             flashColor: CELL_COLOR_ORANGE
         } 
         initialRenderArray[i] = initialRenderData;
+        if(currentBoard.getNumberAtIndex(i)!== -1)
+        {
+            dispatch(ADD_TO_BOARD_SUCESSFUL(i, currentBoard.getNumberAtIndex(i)))
+        }
     }
 
     const [boardRenderData, setBoardRenderData] = useState(initialRenderArray);
 
-    function selectEntry(index)
+    const selectEntry = (index) =>
     {
         const currentColors = [...boardRenderData];
         if(currentIndex!== index && currentIndex!== -1)
@@ -245,37 +255,12 @@ const PuzzleInner = (props) => {
        setBoardRenderData(currentColors);
    }
 
-    function deSelectEntry()
+    const deSelectEntry = () =>
     {
         const currentColors = [...boardRenderData];
         currentColors[currentIndex].cellColors = CELL_COLOR_WHITE;
         setBoardRenderData(currentColors);
         currentIndex = -1;
-    }
-
-    function lightUpSquare(index, color)
-    {
-        var flash = Array(BOARD_SQUARES);
-        var flashColor = Array(BOARD_SQUARES);
-        for(var i=0; i<BOARD_SQUARES; i++)
-        {
-            if(i===index)
-            {
-                flash[i] = true;
-            }
-            else
-            {
-                flash[i] = false;
-            }
-            flashColor[i] = color;
-        }
-        out = 
-        {
-            flash: flash,
-            flashColor: flashColor
-        }
-        return out;
-
     }
 
     const testLightSquareSequence = () =>
@@ -348,6 +333,7 @@ const PuzzleInner = (props) => {
            var number = parseInt(e.key)-1;
            if(currentBoard.addEntry(currentIndex, number))
            {
+               dispatch(ADD_TO_BOARD_SUCESSFUL(currentIndex, number));
                const currentBoardValues  = [...boardRenderData];
                currentBoardValues[currentIndex].boardSudokuCells = number;
 

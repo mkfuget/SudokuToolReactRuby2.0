@@ -7,9 +7,9 @@ import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import 'bootstrap/dist/css/bootstrap.css'
 import App from '../components/App'
-import {createStore} from 'redux'
+import {createStore, combineReducers} from 'redux'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
-import rootReducer from "../reducers/rootReducer"
+import rootReducer from "../components/reducers/rootReducer"
 import {Provider} from 'react-redux'
 
 

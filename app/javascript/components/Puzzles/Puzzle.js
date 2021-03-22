@@ -381,8 +381,8 @@ function PuzzleInner(props) {
                 boardRenderData = {boardRenderData}
                 squareClickFunction = {handleClick}
             />  
-            <button type="button" class="btn btn-primary" onClick ={solvePuzzle}>Solve</button>
-            <button type="button" class="btn btn-primary" onClick ={testLightSquareSequence}>test Lights</button>
+            <button type="button" className="btn btn-primary" onClick ={solvePuzzle}>Solve</button>
+            <button type="button" className="btn btn-primary" onClick ={testLightSquareSequence}>test Lights</button>
 
         </Fragment>
     )

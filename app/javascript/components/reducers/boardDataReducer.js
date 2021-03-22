@@ -4,20 +4,14 @@ const SQUARE_WIDTH = 3;
 
 import Util from '../functional/Util.js'
 
-const initialSolverOrder = Array(4*BOARD_SQUARES).fill(0).map(row => Array(2).fill(0));
-for(var i=0; i<4*BOARD_SQUARES; i++)
-{
-    initialSolverOrder[i][0] = 9;
-    initialSolverOrder[i][1] = i; 
-}
+
 const boardDataReducer = (state =
     {
         entry: Array(BOARD_SQUARES).fill(-1),
         boardHeapIndex: Array(BOARD_SQUARES),
         boardBlocks:  Array(BOARD_SQUARES).fill(0).map(row => Array(BOARD_WIDTH).fill(0)),
         boardNumOptions:  Array(4*BOARD_SQUARES).fill(9),
-        solveOrder:  initialSolverOrder,
-        heapSize:  4*BOARD_SQUARES,
+        priorityQueueData:  initialSolverOrder,
         puzzleType: 'Not Set'
 
     }, action) =>

@@ -11,6 +11,7 @@ import {createStore, combineReducers} from 'redux'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import rootReducer from "../components/reducers/rootReducer"
 import {Provider} from 'react-redux'
+import thunk from 'redux-thunk'
 
 
 

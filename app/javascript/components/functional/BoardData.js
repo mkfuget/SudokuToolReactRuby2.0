@@ -1,96 +1,50 @@
-import PriorityQueue from "./PriorityQueue"
 
 const BOARD_WIDTH = 9;
 const SQUARE_WIDTH = 3;
 const BOARD_SQUARES = 81;
-const HEAP_CAPACITY = 4*BOARD_SQUARES;
-
+    
 export default class BoardData{
-    constructor(puzzleType)
+    constructor()
     {
-        this.boardData = Array(BOARD_SQUARES).fill({
-            entry: -1,
-            blocks: new Array(BOARD_WIDTH).fill(0),
-        })
-        this.boardHeapIndex  = Array(BOARD_SQUARES);
-        this.boardNumOptions = Array(BOARD_SQUARES).fill({
-            type: "cellBlocks",
-            options: 9,
-            heapIndex: -1,
-        })
-        this.squareNumOptions = Array(BOARD_WIDTH).fill(0).map(x =>  Array(BOARD_WIDTH).fill({
-            type: "squareBlocks",
-            options: 9,
-            heapIndex: -1,
-            heapPriority: 1,
-        }))//[0][2] refers stores the number of spots a 3 can be placed in the first square
-        this.rowNumOptions = Array(BOARD_WIDTH).fill(0).map(x =>  Array(BOARD_WIDTH).fill({
-            type: "rowBlocks",
-            options: 9,
-            heapIndex: -1,
-            heapPriority: 2,
-        }))
-        this.colNumOptions = Array(BOARD_WIDTH).fill(0).map(x =>  Array(BOARD_WIDTH).fill({
-            type: "colBlocks",
-            options: 9,
-            heapIndex: -1,
-            heapPriority: 3,
-        }))
-        this.solveOrder = [];
-        
+        this.boardData = Array(BOARD_SQUARES).fill(-1)
+        this.boardHeapIndex  = Array(4*BOARD_SQUARES);
+        this.boardBlocks = Array(BOARD_SQUARES).fill(0).map(row => Array(BOARD_WIDTH).fill(0));
+        this.boardNumOptions = Array(4*BOARD_SQUARES).fill(9);
+        this.solveOrder = Array(4*BOARD_SQUARES).fill(0).map(row => Array(2).fill(0));
         this.heapSize = 4*BOARD_SQUARES;
-        let currentHeapIdex = 0;
+        const heapCapacity = BOARD_SQUARES;
+        this.puzzleType = 16;
         for(let i=0; i<this.boardNumOptions.length; i++)
         {
-            this.solveOrder.push({
-                type: "cellBlock",
-                options: 9,
-                index: i,
-                heapPriority: 0,
-
-            })
-            let squareIndex = Math.floor(i/BOARD_WIDTH)
-            this.boardNumOptions[i].heapIndex = currentHeapIdex;
-            currentHeapIdex++;
-            this.solveOrder.push({
-                type: "squareBlock",
-                options: 9,
-                index: squareIndex,
-                value: i%BOARD_WIDTH,
-                heapPriority: 1,
-
-            })
-            this.squareNumOptions[squareIndex][i%BOARD_WIDTH].heapIndex = currentHeapIdex;
-            currentHeapIdex++;
-
-            this.solveOrder.push({
-                type: "rowBlock",
-                options: 9,
-                index: squareIndex,
-                value: i%BOARD_WIDTH,
-                heapPriority: 2,
-
-            })
-            this.rowNumOptions[squareIndex][i%BOARD_WIDTH].heapIndex = currentHeapIdex;
-            currentHeapIdex++;
-
-
-            this.solveOrder.push({
-                type: "colBlock",
-                options: 9,
-                index: squareIndex,
-                value: i%BOARD_WIDTH,
-                heapPriority: 3,
-
-            })
-            this.colNumOptions[squareIndex][i%BOARD_WIDTH].heapIndex = currentHeapIdex;
-            currentHeapIdex++;
-
-        }
-        
-    }   
-
     
+            this.solveOrder[i][0] = this.boardNumOptions[i];
+            this.solveOrder[i][1] = i;
+            this.boardHeapIndex[i] = i;
+        }    
+    }   
+    addData(boardImport)
+    {
+        for(let i=0; i<BOARD_SQUARES; i++)
+        {
+            if(boardImport.data[i]!== ".")
+            {
+                const number= parseInt(boardImport.data[i]-1);
+                this.addEntry(i, number);
+            }
+        }    
+    }
+    
+    //getters
+    getCurrentBoardData()
+    {
+        return this.boardData;
+    }
+
+    getNumberAtIndex(index)
+    {
+        return this.boardData[index];
+    }
+
     isPlacableClassicSudoku(currentIndex, currentNumber, testIndex, testNumber)
     {
         var currentSquare = this.indexToSquare(currentIndex);
@@ -175,9 +129,9 @@ export default class BoardData{
 
     addEntry(index, number)
     {
-        if(this.boardData[index].blocks[number]>0)//placement not allowed on this square
+        if(this.boardBlocks[index][number]>0)//placement not allowed on this square
         {
-            const out =
+            var out =
             {
                 type: "Failure",
                 index: -1,
@@ -185,25 +139,37 @@ export default class BoardData{
             }
             return out;
         }
-        if(this.boardData[index].entry!==-1)
+        if(this.boardData[index]!=-1)
         {
-            //this.deleteEntry(index);
+            this.deleteEntry(index);
         }
 
-        for(let i=0; i<BOARD_SQUARES; i++)
+        for(var i=0; i<BOARD_SQUARES; i++)
         {
             if(this.isPlacable(index, number, i, number)==0 && index!=i)
             {
-                if(this.boardData[i].blocks[number]==0)//we are adding the first blocking square for this index and number
+                if(this.boardBlocks[i][number]==0)//we are adding the first blocking square for this index and number
                 {
-                    this.updateBoardNumOptions(i, number, -1);
+                    this.updateBoardNumOptions(i, -1);
+
+                    var currentSquareIndex = this.getSquareHeapIndex(i, number);
+                    var currentColIndex = this.getColHeapIndex(i, number);
+                    var currentRowIndex = this.getRowHeapIndex(i, number);
+
+                    this.updateBoardNumOptions(currentSquareIndex, -1);
+                    this.updateBoardNumOptions(currentColIndex, -1);
+                    this.updateBoardNumOptions(currentRowIndex, -1);
                 }
-                this.boardData[i].blocks[number]++;//indicate new squares that now cannot be placed in
+                this.boardBlocks[i][number]++;//indicate new squares that now cannot be placed in
             }
         }
-        /*
+
+        var addedSquareIndex = this.getSquareHeapIndex(index, number);
+        var addedColIndex = this.getColHeapIndex(index, number);
+        var addedRowIndex = this.getRowHeapIndex(index, number);
+
         //remove one from each number that could be placed in the placed square
-        for(let i=0; i<BOARD_WIDTH; i++)
+        for(var i=0; i<BOARD_WIDTH; i++)
         {
             if(this.boardBlocks[index][i]==0 && i!=number)
             {
@@ -219,29 +185,22 @@ export default class BoardData{
             this.boardBlocks[index][i]++; 
         }
 
-        let cellHeapIndex = this.boardNumOptions[index];
-        let squareHeapIndex = this.squareNumOptions[this.indexToSquare(index)][number];
-        let rowHeapIndex = this.rowNumOptions[this.indexToRow(index)][number];
-        let colHeapIndex = this.colNumOptions[this.indexToCol(index)][number];
 
+        this.deleteHeapIndex(this.boardHeapIndex[index]);
+        this.deleteHeapIndex(this.boardHeapIndex[addedSquareIndex]);
+        this.deleteHeapIndex(this.boardHeapIndex[addedColIndex]);
+        this.deleteHeapIndex(this.boardHeapIndex[addedRowIndex]);
 
-        this.deleteHeapIndex(cellHeapIndex);
-        this.deleteHeapIndex(squareHeapIndex);
-        this.deleteHeapIndex(rowHeapIndex);
-        this.deleteHeapIndex(colHeapIndex);
-
+        this.boardData[index] = number;    
         this.heapify();
-        */
-       this.boardData[index].entry = number;    
-
-        const out =
+        var out =
         {
             type: "Success",
             index: index,
             number: number
         }
 
-        return out;
+        return true;
     }
 
 
@@ -255,18 +214,26 @@ export default class BoardData{
             {
                 if(this.isPlacable(index, number, i, number)==0 && index!=i)
                 {
-                    if(this.boardData[i].blocks[number]==1)// we are removing the only blocking square for this index, 
+                    if(this.boardBlocks[i][number]==1)// we are removing the only blocking square for this index, 
                     {
                         this.updateBoardNumOptions(i, 1);
 
+                        var currentSquareIndex = this.getSquareHeapIndex(i, number);
+                        var currentColIndex = this.getColHeapIndex(i, number);
+                        var currentRowIndex = this.getRowHeapIndex(i, number);
+
+                        this.updateBoardNumOptions(currentSquareIndex, 1);
+                        this.updateBoardNumOptions(currentColIndex, 1);
+                        this.updateBoardNumOptions(currentRowIndex, 1);
+
                     }        
-                    this.boardData[i].blocks[number]--;
+                    this.boardBlocks[i][number]--;
                 }
             }
 
             for(var i=0; i<BOARD_WIDTH; i++)//indicate that a blocker is removed for each number in the square that is being placed in
             {
-                this.boardData[index].blocks[i]--;
+                this.boardBlocks[index][i]--;
             }
 
             var addedSquareIndex = this.getSquareHeapIndex(index, number);
@@ -283,39 +250,29 @@ export default class BoardData{
                 }
             }
 
+
+
+
+            
             this.boardData[index] = -1;   
             this.heapPush(this.boardNumOptions[index], index);
             this.heapPush(this.boardNumOptions[addedSquareIndex], addedSquareIndex);
             this.heapPush(this.boardNumOptions[addedColIndex], addedColIndex);
             this.heapPush(this.boardNumOptions[addedRowIndex], addedRowIndex);
 
-            //
             this.heapify();
         }
     }
 
-    //when a new first blocker is added updates that cell, square row and column to indicate there is one less number possible there. 
-    updateBoardNumOptions(index, number, change)
+
+    updateBoardNumOptions(index, change)
     {
-        let cellNumOptions = this.boardNumOptions[index];
-        let squareNumOptions = this.squareNumOptions[this.indexToSquare(index)][number];
-        let rowNumOptions = this.rowNumOptions[this.indexToRow(index)][number];
-        let colNumOptions = this.colNumOptions[this.indexToCol(index)][number];
-
-        cellNumOptions.options+=change;
-        this.solveOrder[cellNumOptions.heapIndex].options+=change;
-
-        squareNumOptions.options+=change;
-        this.solveOrder[squareNumOptions.heapIndex].options+=change;
-
-        rowNumOptions.options+=change;
-        this.solveOrder[rowNumOptions.heapIndex].options+=change;
-
-        colNumOptions.options+=change;
-        this.solveOrder[colNumOptions.heapIndex].options+=change;
+        this.boardNumOptions[index]+=change;
+        var heapIndex = this.boardHeapIndex[index];
+        this.solveOrder[heapIndex][0] = this.boardNumOptions[index];
     }
     solve()
-    {
+        {
         var choices = [];
         var currentNumberGuess=0;
         while(this.heapSize>0)
@@ -444,6 +401,18 @@ export default class BoardData{
     {
         return this.heapSize === 0;
     }
+    getSquareHeapIndex(index, number)
+    {
+        return (BOARD_SQUARES+this.indexToSquare(index)*BOARD_WIDTH+number);
+    }
+    getColHeapIndex(index, number)
+    {
+        return (2*BOARD_SQUARES+this.indexToCol(index)*BOARD_WIDTH+number);
+    }
+    getRowHeapIndex(index, number)
+    {
+        return (3*BOARD_SQUARES+this.indexToRow(index)*BOARD_WIDTH+number);
+    }
 
     indexToRow(index)
     {
@@ -476,12 +445,12 @@ export default class BoardData{
 
     heapPush(value, index)
     {
-        if(this.heapSize==HEAP_CAPACITY)
+        if(this.heapSize==this.heapCapacity)
         {
             return;
         }
         this.heapSize++;
-        let heapIndex = this.heapSize-1;
+        var heapIndex = this.heapSize-1;
         this.solveOrder[heapIndex][0] = this.boardNumOptions[index];
         this.solveOrder[heapIndex][1] = index;
 
@@ -500,7 +469,7 @@ export default class BoardData{
     }
 
     heapPop()
-    {
+        {
         if(heapSize<=0)
         {
             var out = -1;
@@ -528,24 +497,47 @@ export default class BoardData{
 
     bubbleDown(heapIndex)
     {
-        let leftIndex = this.left(heapIndex);
-        let rightIndex = this.right(heapIndex);
-        let childIndex = heapIndex;
+        var leftIndex = this.left(heapIndex);
+        var rightIndex = this.right(heapIndex);
+        var child = heapIndex;
 
+        var childValue = this.solveOrder[child][0];
+        var childBoardIndex = this.solveOrder[child][1];
         if(leftIndex < this.heapSize)
         {
-            if(this.compareCells(leftIndex, childIndex))
+            var leftValue = this.solveOrder[leftIndex][0];
+            var leftBoardIndex = this.solveOrder[leftIndex][1];
+    
+            if(leftValue < childValue)
             {
-                childIndex = leftIndex;
+                child = leftIndex;
+                childValue = leftValue;
+                childBoardIndex = leftBoardIndex;
             } 
+            else if(leftValue === childValue && leftBoardIndex < childBoardIndex)
+            {
+                child = leftIndex;
+                childValue = leftValue;
+                childBoardIndex = leftBoardIndex;    
+            }
         }
         if(rightIndex < this.heapSize)
         {
+            var rightValue = this.solveOrder[rightIndex][0];
+            var rightBoardIndex = this.solveOrder[rightIndex][1];
     
-            if(this.compareCells(rightIndex, childIndex))
+            if(rightValue < childValue)
             {
-                childIndex = rightIndex;
+                child = rightIndex;
+                childValue = rightValue;
+                childBoardIndex = rightBoardIndex;
             } 
+            else if(rightBoardIndex < childBoardIndex && rightValue === childValue)
+            {
+                child = rightIndex;
+                childValue = rightValue;
+                childBoardIndex = rightBoardIndex;    
+            }
         }
         if(child!=heapIndex)
         {
@@ -556,7 +548,7 @@ export default class BoardData{
 
     bubbleUp(heapIndex)// cal on index in heap
     {
-        while(heapIndex!=0 && this.compareCells(heapIndex, parentHeapIndex))
+        while(heapIndex!=0 && this.solveOrder[this.parent(heapIndex)][0]>this.solveOrder[heapIndex][0])
         {
             this.heapSwap(this.parent(heapIndex), heapIndex);
             heapIndex=this.parent(heapIndex);
@@ -565,9 +557,8 @@ export default class BoardData{
 
     heapSwap(parentHeapIndex, childHeapIndex)
     {
-
-        let parentboardIndex = this.solveOrder[parentHeapIndex][1];
-        let childboardIndex = this.solveOrder[childHeapIndex][1];
+        var parentboardIndex = this.solveOrder[parentHeapIndex][1];
+        var childboardIndex = this.solveOrder[childHeapIndex][1];
 
         var temp = this.solveOrder[parentHeapIndex];
         this.solveOrder[parentHeapIndex] = this.solveOrder[childHeapIndex];
@@ -577,63 +568,14 @@ export default class BoardData{
         this.boardHeapIndex[childboardIndex] = parentHeapIndex;
 
     }
-    heapIndexToNumOptions(heapIndex)
-    {
-        let heapEntry = this.solveOrder[heapIndex]
 
-        switch(heapEntry === 'cellBlock')
-        {
-            case 'cellBlock':
-                return this.boardNumOptions[heapEntry.index];
-                break;
-            case 'squareBlock':
-                return this.squareNumOptions[heapEntry.index][heapEntry.value];
-                break;
-            case 'rowBlock':
-                return this.squareNumOptions[heapEntry.index][heapEntry.value];
-                break;
-            case 'colBlock':
-                return this.squareNumOptions[heapEntry.index][heapEntry.value];
-                break;
-        }
-    }
     heapify()
     {
+
         for(var i=this.heapSize; i>=0; i--)
         {
             this.bubbleDown(i);
         }
-    }
-    compareCells(heapIndexA, heapIndexB)
-    {
-        const heapEntryA = this.solveOrder[indexA];
-        const heapEntryB = this.solveOrder[indexB];
-
-        const numOptionsA = heapEntryA.numOptions;
-        const numOptionsB = heapEntryB.numOptions;
-
-        if(numOptionsA !== numOptionsB)
-        {
-            return numOptionsA < numOptionsB
-        }
-
-        const heapPriorityA = heapEntryA.heapPriority;
-        const heapPriorityB = heapEntryB.heapPriority;
-
-        if(heapPriorityA !== heapPriorityB) 
-        {
-            return heapPriorityA < heapPriorityB;
-        }
-
-        const indexA = heapEntryA.index
-        const indexB = heapEntryB.index
-
-        if(indexA !== indexB)
-        {
-            return indexA < indexB
-        }
-        return heapEntryA.value < heapEntryB.value
-
     }
     verifyHeapIntegrity()
     {

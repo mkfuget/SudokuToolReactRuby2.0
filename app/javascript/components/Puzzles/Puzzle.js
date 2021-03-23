@@ -1,8 +1,6 @@
 import React, {useState, useEffect, Fragment} from 'react'
 import axios from 'axios'
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import * as InputUtility from '../functional/InputUtility'
 import {useSelector, useDispatch} from 'react-redux'
 import {useSpring, animated} from 'react-spring'
 import BoardData from '../functional/BoardData'
@@ -56,8 +54,7 @@ const BoardTable = styled.table`
 const SudokuCell = (props) => {
     const colorOut = 'rgba('+props.flashColor+', 0)';
     const colorIn = 'rgba('+props.flashColor+', 0.7)';
-
-
+    const cellValue = useSelector(state => state.boardDataReducer).entry[props.index]
     const flashSquare = useSpring({
         config: {
             Mass: 10,
@@ -85,7 +82,7 @@ const SudokuCell = (props) => {
                 className= "CellStyle"
                 onClick={props.onClick}
             >
-                {props.value!==0 ? props.value : ""}
+                {cellValue!==-1 ? (props.value+1) : ""}
             </CellStyle>
         }
         </Fragment>
@@ -100,11 +97,7 @@ const Board = (props) => {
         
         return (
             <SudokuCell 
-                value ={props.boardRenderData[index].boardSudokuCells+1} 
-                cellColor={props.boardRenderData[index].cellColors} 
-                flashOn = {props.boardRenderData[index].flashOn}
-                flashColor = {props.boardRenderData[index].flashColor}
-                onClick={() => {props.squareClickFunction(index)}}  
+                index = {index} 
             />
         );
     }
@@ -222,9 +215,8 @@ function PuzzleInner(props) {
     const dispatch = useDispatch();
     const initialState = props.puzzleDatabasePull.data;
     const puzzleType = props.puzzleDatabasePull.puzzletype_id;
-    var currentBoard = new BoardData(initialState, puzzleType);
     const initialRenderArray = Array(BOARD_SQUARES).fill(0);
-    for(var i=0; i<BOARD_SQUARES; i++)
+    for(let i=0; i<BOARD_SQUARES; i++)
     {
         const  initialRenderData = 
         {
@@ -389,32 +381,32 @@ function PuzzleInner(props) {
 }
 
     const Puzzle = (props) =>{
-        const [currentPuzzleFromDatabase, setCurrentPuzzleFromDatabase] = useState ([]);
         const [loaded, setLoaded] = useState(false);    
-
-        useEffect(() => {
-            const slug = props.match.params.slug
-            const url = `/api/v1/puzzles/${slug}`
-            console.log(props)
-            axios.get(url)
-            .then( resp => {
-                console.log(resp.data)
-                setCurrentPuzzleFromDatabase(resp.data.data[0].attributes)
-                setLoaded(true)
-            
-            })
+        if(!loaded)
+        {
+            useEffect(() => {
+                const slug = props.match.params.slug
+                const url = `/api/v1/puzzles/${slug}`
+                console.log(props)
+                axios.get(url)
+                .then( resp => {
+                    console.log(resp.data)
+                    InputUtility.initializeBoard(resp.data.data[0].attributes)
+                    setLoaded(true)
                 
-            .catch ( resp => console.log(resp))
-       }, [])
-       if(loaded)
-       {
-               
-        return <PuzzleInner puzzleDatabasePull={currentPuzzleFromDatabase}/>
-    }
+                })
+                    
+                .catch ( resp => console.log(resp))
+            }, [])
+        }
+        if(loaded)
+        {
+            return <PuzzleInner puzzleDatabasePull={currentPuzzleFromDatabase}/>
+        }
        
-       {
+        {
            return <div>this is the Puzzle view</div>
-       }
+        }
    
     
     }

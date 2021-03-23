@@ -1,13 +1,12 @@
 
 
-function ADD_TO_BOARD_SUCESSFUL(index, number)
+function UPDATE_BOARD(boardData)
 {
     const action = {
-        type: 'ADD_TO_BOARD_SUCCESSFUL',
-        index: index,
-        number: number
+        type: 'UPDATE_BOARD',
+        payload: boardData
     }
     return action;
 } 
 
-export default ADD_TO_BOARD_SUCESSFUL;
+export default UPDATE_BOARD;

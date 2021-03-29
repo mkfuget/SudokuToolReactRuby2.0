@@ -7,22 +7,19 @@ import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import 'bootstrap/dist/css/bootstrap.css'
 import App from '../components/App'
-import {createStore, combineReducers} from 'redux'
+import {createStore, applyMiddleware, compose} from 'redux'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import rootReducer from "../components/reducers/rootReducer"
 import {Provider} from 'react-redux'
+import sudokuStore from '../store'
 import thunk from 'redux-thunk'
+import * as InputUtility from '../components/functional/InputUtility'
 
 
-
-
-const sudokuToolReduxStore = createStore(rootReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-  );
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
-    <Provider store = {sudokuToolReduxStore}>
+    <Provider store = {sudokuStore}>
       <Router>
         <Route path="/" component={App}/>
       </Router>

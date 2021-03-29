@@ -7,6 +7,7 @@
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "4.3.0",
+    "animejs": "^3.2.1",
     "axios": "^0.21.1",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "bootstrap": "^4.5.2",
@@ -21,6 +22,7 @@
     "react-spring": "^8.0.27",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
+    "redux-time": "0.0.29",
     "styled-components": "^5.2.0",
     "turbolinks": "^5.2.0"
   },
@@ -41,7 +43,12 @@
   "jest": {
     "roots": [
       "spec/javascript"
-    ]
+    ],
+    "moduleNameMapper": {
+      "\\.(jpg|ico|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|less)$": "<rootDir>/__mocks__/fileMock.js"
+    }
+
   },
   "repository": {
     "type": "git",

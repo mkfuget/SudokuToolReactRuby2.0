@@ -22,16 +22,27 @@ export default class BoardData{
             this.boardHeapIndex[i] = i;
         }    
     }   
-    addData(boardImport)
+    //takes an array of numbers or empty squares and adds the correct number to the corresponding square
+    addData(data)
     {
         for(let i=0; i<BOARD_SQUARES; i++)
         {
-            if(boardImport.data[i]!== ".")
+            if(data[i]!== ".")
             {
-                const number= parseInt(boardImport.data[i]-1);
+                const number= parseInt(data[i]-1);
                 this.addEntry(i, number);
             }
         }    
+    }
+
+    addDataHash(hash)
+    {
+        this.boardData = hash.boardData
+        this.boardHeapIndex  = hash.boardHeapIndex
+        this.boardBlocks = hash.boardBlocks
+        this.boardNumOptions = hash.boardNumOptions
+        this.solveOrder = hash.solveOrder
+        this.heapSize = hash.heapSize
     }
     
     //getters
@@ -131,20 +142,29 @@ export default class BoardData{
     {
         if(this.boardBlocks[index][number]>0)//placement not allowed on this square
         {
-            var out =
+            const out =
             {
                 type: "Failure",
-                index: -1,
-                number: number
+                index: index,
+                number: number,
+                blockers: []
+            }
+            for(let i=0; i<BOARD_SQUARES; i++)
+            {
+                if(conflictOnBoard(index, number, i))
+                {
+                    blockers.push[i],
+                }
+
             }
             return out;
         }
-        if(this.boardData[index]!=-1)
+        if(this.boardData[index]!==-1)
         {
             this.deleteEntry(index);
         }
 
-        for(var i=0; i<BOARD_SQUARES; i++)
+        for(let i=0; i<BOARD_SQUARES; i++)
         {
             if(this.isPlacable(index, number, i, number)==0 && index!=i)
             {
@@ -193,7 +213,7 @@ export default class BoardData{
 
         this.boardData[index] = number;    
         this.heapify();
-        var out =
+        const out =
         {
             type: "Success",
             index: index,

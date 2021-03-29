@@ -1,9 +1,4 @@
 const BOARD_SQUARES = 81;
-const BOARD_WIDTH = 9;
-const SQUARE_WIDTH = 3;
-
-import Util from '../functional/Util.js'
-
 
 const boardDataReducer = (state =
     {

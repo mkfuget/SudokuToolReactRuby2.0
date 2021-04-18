@@ -32,6 +32,7 @@ const PuzzleTableHeaderData = styled.td`
     vertical-align: middle;
     border: 1px solid;
     border-color: white;
+    font-size: 24px;
 `
 
 const PuzzleTableEntryData = styled.td`
@@ -41,6 +42,8 @@ const PuzzleTableEntryData = styled.td`
     vertical-align: middle;
     border: 1px solid;
     border-color: white;
+    font-size: 18px;
+
 `
 
 const PuzzletypeTableEntry = (props) => {
@@ -80,7 +83,7 @@ const PuzzletypeTableEntry = (props) => {
                             : '+'
                         }
                         </Button>
-                        {props.attributes.name}
+                        {" "+props.attributes.name}
                     </PuzzleTableHeaderData>
                 </PuzzleTypeHeaderRow>
 
@@ -113,9 +116,9 @@ const PuzzleTableEntry = (props) => {
 
     return (
             <tr className = "PuzzleTableEntryRow">
-                <td className = "PuzzleTableEntryData">
+                <PuzzleTableEntryData>
                         <Link to={"/puzzles/"+props.attributes.slug}>{props.attributes.name}</Link>
-                </td>
+                </PuzzleTableEntryData>
                 <PuzzleTableEntryData>{props.attributes.author}</PuzzleTableEntryData>
                 <PuzzleTableEntryData>{props.attributes.difficulty}</PuzzleTableEntryData>
             </tr>

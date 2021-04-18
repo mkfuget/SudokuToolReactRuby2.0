@@ -1,6 +1,6 @@
 import React, {useState, useEffect, Fragment} from 'react'
 import axios from 'axios'
-import * as InputUtility from '../functional/InputUtility'
+import * as Input from '../functional/InputUtility'
 import {useSelector, useDispatch} from 'react-redux'
 import {useSpring, animated} from 'react-spring'
 import BoardData from '../functional/BoardData'
@@ -16,16 +16,15 @@ const SQUARE_WIDTH = 3;
 const BOARD_SQUARES = 81;
 
 console.log(window.location.href)
-sudokuStore.dispatch(InputUtility.fetchBoardData(`/api/v1/puzzles/classic-easy-1`));
+sudokuStore.dispatch(Input.fetchBoardData(`/api/v1/puzzles/classic-easy-1`));
 
     const Puzzle = (props) =>{
         const dispatch = useDispatch();
         const stateData = useSelector(state => state.boardDataReducer).data;
         const currentSelectionIndex = useSelector(state => state.selectionReducer).index;
-        const slug = props.match.params.slug;
-        const url = `/api/v1/puzzles/${slug}`;
+        const solvePuzzleHandler = Input.solvePuzzle(stateData);           
 
-        const handleKeyDown = (e) => {dispatch(InputUtility.processKeyPress(e, stateData, currentSelectionIndex))};
+        const handleKeyDown = (e) => {dispatch(Input.processKeyPress(e, stateData, currentSelectionIndex))};
         
         React.useEffect(() => {
             document.addEventListener('keydown',handleKeyDown)
@@ -44,7 +43,7 @@ sudokuStore.dispatch(InputUtility.fetchBoardData(`/api/v1/puzzles/classic-easy-1
              <Fragment>
                  <Board 
                  />  
-                 <button type="button" className="btn btn-primary" >Solve</button>
+                 <button type="button" onClick = {()=>solvePuzzleHandler(stateData)} className="btn btn-primary" >Solve</button>
                  <button type="button" className="btn btn-primary" >test Lights</button>
      
              </Fragment>

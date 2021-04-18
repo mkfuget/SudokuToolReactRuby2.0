@@ -15,6 +15,8 @@ export const fetchBoardData = (url) =>
             const boardData = data.data.data[0].attributes.data;
             addBoard.addData(boardData);
             console.log(data);
+            console.log(addBoard);
+
             dispatch(Action.UPDATE_BOARD(boardToStoreHash(addBoard)))
         }
         catch(e){
@@ -41,6 +43,43 @@ export function selectCell(index)
     }
 }
 
+export function solvePuzzle(stateData)
+{
+    const dispatch = useDispatch();
+
+    return () => 
+    {
+        let addBoard = new BoardData();
+        addBoard.addDataHash(stateData);
+        const output = addBoard.solvePuzzle();
+        let i =0;
+        let interval = setInterval(iterateDispatch, 400)
+        function iterateDispatch() {
+
+            const index = output[i].index;
+            const number = output[i].number;
+            switch(output[i].stepTaken)
+            {
+                case "Added":
+                    addBoard.addEntry(index, number);
+                    dispatch(Action.ANIMATE_BOARD_ADDITION(index, boardToStoreHash(addBoard)))
+                    break;
+                case "Removed":
+                    addBoard.deleteEntry(index, number);
+                    dispatch(Action.ANIMATE_BOARD_SUBTRACTION(index, boardToStoreHash(addBoard)))
+                    break;
+    
+            }
+            i++;
+            if(i>output.length)
+            {
+                clearInterval(interval);
+            }
+        }
+    }
+
+}
+
 export function processKeyPress(e, stateData, index)
 {
     if(index!== -1)
@@ -57,17 +96,27 @@ export function processKeyPress(e, stateData, index)
                 number = parseInt(e.keyCode) - 96 - 1;
             }
     
-            console.log(number);
         
         
             let addBoard = new BoardData();
             addBoard.addDataHash(stateData);
             const output = addBoard.addEntry(index, number)
-        
-            console.log(output);
-            console.log(stateData);
+            if(output.type === "Failure")
+            {
+                return Action.UPDATE_BOARD_FAILURE(output)
+
+            }
         
             return Action.UPDATE_BOARD(boardToStoreHash(addBoard))
+        }
+        else if(e.keyCode === 46)
+        {
+            let addBoard = new BoardData();
+            addBoard.addDataHash(stateData);
+            const output = addBoard.deleteEntry(index)
+
+            return Action.UPDATE_BOARD(boardToStoreHash(addBoard))
+
         }
     }
     return {
@@ -79,6 +128,7 @@ const boardToStoreHash = (board) =>
 {
     return {
         boardData: board.boardData,
+        confirmedSquares: board.confirmedSquares,
         boardBlocks: board.boardBlocks,
         boardHeapIndex: board.boardHeapIndex,
         boardNumOptions: board.boardNumOptions,

@@ -4,16 +4,11 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import PropTypes from 'prop-types'
 import 'bootstrap/dist/css/bootstrap.css'
 import App from '../components/App'
-import {createStore, applyMiddleware, compose} from 'redux'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
-import rootReducer from "../components/reducers/rootReducer"
 import {Provider} from 'react-redux'
 import sudokuStore from '../store'
-import thunk from 'redux-thunk'
-import * as InputUtility from '../components/functional/InputUtility'
 
 
 

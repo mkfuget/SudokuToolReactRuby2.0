@@ -1,9 +1,6 @@
 import React, {useState, useEffect, Fragment} from 'react'
 import PuzzletypeTableEntry from './PuzzletypeTableEntry'
 import axios from 'axios'
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import styled from 'styled-components'
 
 const PuzzleTableHeader = styled.div`
@@ -13,11 +10,13 @@ const PuzzleTableHeader = styled.div`
 
 const PuzzletypesTableSubheader = styled.div`
     text-align: center;
+    font-size: 
 `
 
 const PuzzleTable = styled.div`
-    padding: 100px;
-    width:800px;
+    margin-left: 100px;
+    margin-right: 100px;
+
 `
 
 
@@ -46,7 +45,7 @@ const Puzzletype = () => {
     })
 
     return (
-        <div className = "Puzzletypesview">
+        <PuzzleTable>
             <PuzzleTableHeader>
                 <h1>Sudoku Puzzles</h1>
                     <PuzzletypesTableSubheader>
@@ -58,7 +57,7 @@ const Puzzletype = () => {
                     {allPuzzleTypes}
                 </tbody>
             </table>
-        </div>
+        </PuzzleTable>
     )
 }
 

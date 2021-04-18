@@ -9,6 +9,15 @@ export function UPDATE_BOARD(boardData)
     return action;
 } 
 
+export function UPDATE_BOARD_FAILURE(data)
+{
+    const action = {
+        type: 'UPDATE_BOARD_FAILURE',
+        payload: data.blockers,
+    }
+    return action;
+}
+
 export function UPDATE_SELECTION(index)
 {
     const action = {
@@ -35,14 +44,28 @@ export function FLASH_SQUARE(index, color)
         }
     }    
     return action;
-
-
 }
 
-export function CLEAR_FLASHES()
+export function ANIMATE_BOARD_ADDITION(index, data)
 {
     const action = {
-        type: 'CLEAR_FLASHES',
+        type: 'ANIMATE_BOARD_ADDITION',
+        payload: {
+            index: index,
+            data: data
+        }
+    }    
+    return action;
+}
+
+export function ANIMATE_BOARD_SUBTRACTION(index, data)
+{
+    const action = {
+        type: 'ANIMATE_BOARD_SUBTRACTION',
+        payload: {
+            index: index,
+            data: data
+        }
     }    
     return action;
 }

@@ -7,6 +7,8 @@ export default class BoardData{
     constructor()
     {
         this.boardData = Array(BOARD_SQUARES).fill(-1)
+        this.confirmedSquares = Array(BOARD_SQUARES).fill(false)
+
         this.boardHeapIndex  = Array(4*BOARD_SQUARES);
         this.boardBlocks = Array(BOARD_SQUARES).fill(0).map(row => Array(BOARD_WIDTH).fill(0));
         this.boardNumOptions = Array(4*BOARD_SQUARES).fill(9);
@@ -30,7 +32,11 @@ export default class BoardData{
             if(data[i]!== ".")
             {
                 const number= parseInt(data[i]-1);
-                this.addEntry(i, number);
+                const output = this.addEntry(i, number);
+                if(output.type === "Success")
+                {
+                    this.confirmedSquares[i] = true;
+                }
             }
         }    
     }
@@ -38,6 +44,7 @@ export default class BoardData{
     addDataHash(hash)
     {
         this.boardData = hash.boardData
+        this.confirmedSquares = hash.confirmedSquares
         this.boardHeapIndex  = hash.boardHeapIndex
         this.boardBlocks = hash.boardBlocks
         this.boardNumOptions = hash.boardNumOptions
@@ -134,7 +141,7 @@ export default class BoardData{
     //for a given index and number, returns if it conflicts with a given square based on current board state
     conflictOnBoard(index, number, targetIndex)
     {
-        return this.isPlacable(index, number, targetIndex, this.boardData[targetIndex]);
+        return !this.isPlacable(index, number, targetIndex, this.boardData[targetIndex]);
 
     }
 
@@ -142,7 +149,7 @@ export default class BoardData{
     {
         if(this.boardBlocks[index][number]>0)//placement not allowed on this square
         {
-            const out =
+            let out =
             {
                 type: "Failure",
                 index: index,
@@ -151,9 +158,9 @@ export default class BoardData{
             }
             for(let i=0; i<BOARD_SQUARES; i++)
             {
-                if(conflictOnBoard(index, number, i))
+                if(this.conflictOnBoard(index, number, i))
                 {
-                    blockers.push[i],
+                    out.blockers.push(i)
                 }
 
             }
@@ -220,7 +227,7 @@ export default class BoardData{
             number: number
         }
 
-        return true;
+        return out;
     }
 
 
@@ -310,26 +317,38 @@ export default class BoardData{
             var index = nextStep.index;
             var number = nextStep.number;
             var returnType = nextStep.type;
+            let addToSolutionSteps = {};
             switch(returnType)
             {
                 case 'Placement Successful':
                     this.addEntry(index, number);
                     choices.push([index, guessIndex]);
-                    var addToSolutionSteps = 
+                    addToSolutionSteps = 
                     {
                         index: index,
                         guessIndex: guessIndex,
                         number: number,
-                        stepTaken: 'Added'
+                        stepTaken: 'Added',
+                        puzzleIsSolved: true
+
                     }
                     guessIndex = 0;
                     solutionSteps.push(addToSolutionSteps);
                     if(this.puzzleIsSolved())
                     {
-                        var lastChoice = choices.pop();
+                        let lastChoice = choices.pop();
                         index = lastChoice[0];
                         this.deleteEntry(index);
-                        guessIndex = lastChoice[1]+1;    
+                        guessIndex = lastChoice[1]+1;  
+                        addToSolutionSteps = 
+                        {
+                            index: index,
+                            guessIndex: guessIndex,
+                            number: number,
+                            stepTaken: 'Removed',
+                            puzzleIsSolved: true
+                        }  
+                        solutionSteps.push(addToSolutionSteps);
                     }
                     break;
                 case 'Placement Failed':
@@ -340,16 +359,18 @@ export default class BoardData{
                     {
                         return solutionSteps;
                     }
-                    var lastChoice = choices.pop();
+                    let lastChoice = choices.pop();
                     index = lastChoice[0];
                     this.deleteEntry(index);
                     guessIndex = lastChoice[1]+1;
-                    var addToSolutionSteps = 
+                    addToSolutionSteps = 
                     {
                         index: index,
                         guessIndex: guessIndex,
                         number: 0,
-                        stepTaken: 'Removed'
+                        stepTaken: 'Removed',
+                        puzzleIsSolved: true
+
                     }
 
                     solutionSteps.push(addToSolutionSteps);
@@ -360,35 +381,35 @@ export default class BoardData{
     }
     iterateHeapSolution(guessIndex)
     {
-        var index = this.heapTop()[1];
-        var number = guessIndex;
+        let index = this.heapTop()[1];
+        let number = guessIndex;
 
         if(index>=3*BOARD_SQUARES)//choosing from the row with the fewest options for a given number
         {
             number = index%BOARD_WIDTH;
-            var rowNumber = Math.floor((index%BOARD_SQUARES)/BOARD_WIDTH);
+            let rowNumber = Math.floor((index%BOARD_SQUARES)/BOARD_WIDTH);
             index = rowNumber*BOARD_WIDTH+guessIndex;
         }
         else if(index>=2*BOARD_SQUARES)//choosing from the col with the fewest options for a given number
         {
             number = index%BOARD_WIDTH;
-            var colNumber = Math.floor((index%BOARD_SQUARES)/BOARD_WIDTH);
+            let colNumber = Math.floor((index%BOARD_SQUARES)/BOARD_WIDTH);
             index = colNumber + BOARD_WIDTH*guessIndex;
         } 
         else if(index>=BOARD_SQUARES)//choosing from the square with the fewest options for a given number
         {
             number = index%BOARD_WIDTH;
-            var squareNumber = Math.floor((index%BOARD_SQUARES)/BOARD_WIDTH);
-            var squareIndex = SQUARE_WIDTH*(squareNumber%SQUARE_WIDTH) + BOARD_WIDTH*SQUARE_WIDTH*Math.floor(squareNumber/SQUARE_WIDTH);//index corresponding to first entry of that square
-            var downIndex = Math.floor(guessIndex/SQUARE_WIDTH);//determines which column the square is in
-            var rightIndex = guessIndex%SQUARE_WIDTH;
+            let squareNumber = Math.floor((index%BOARD_SQUARES)/BOARD_WIDTH);
+            let squareIndex = SQUARE_WIDTH*(squareNumber%SQUARE_WIDTH) + BOARD_WIDTH*SQUARE_WIDTH*Math.floor(squareNumber/SQUARE_WIDTH);//index corresponding to first entry of that square
+            let downIndex = Math.floor(guessIndex/SQUARE_WIDTH);//determines which column the square is in
+            let rightIndex = guessIndex%SQUARE_WIDTH;
 
             index = squareIndex + rightIndex + downIndex*BOARD_WIDTH;
         }
 
         if(guessIndex>=BOARD_WIDTH)   
         {
-            var out = 
+            let out = 
             {
                 type: 'Out of options for current path',
                 index: index,
@@ -398,7 +419,7 @@ export default class BoardData{
         }
         else if(this.boardBlocks[index][number]==0)//placement is allowed
         {
-            var out = 
+            let out = 
             {
                 type: 'Placement Successful',
                 index: index,
@@ -408,7 +429,7 @@ export default class BoardData{
         }
         else
         {
-            var out = 
+            let out = 
             {
                 type: 'Placement Failed',
                 index: index,

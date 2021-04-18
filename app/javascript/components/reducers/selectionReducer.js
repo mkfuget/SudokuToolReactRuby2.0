@@ -11,6 +11,8 @@ const selectionReducer = (state =
             return {index: action.payload}
         case 'CLEAR_SELECTION':
             return {index: -1}
+        case 'UPDATE_BOARD':
+            return {index: -1}
         default: 
             return state;
     }

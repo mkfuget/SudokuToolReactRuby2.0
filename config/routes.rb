@@ -5,6 +5,8 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :puzzletypes, param: :slug
       resources :puzzles, param: :slug
+      get '/puzzles/daily', to: 'puzzles#daily'
+
     end
   end
 

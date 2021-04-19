@@ -1,3 +1,5 @@
+
+
 module Api
     module V1
         class PuzzlesController < ApplicationController
@@ -11,11 +13,16 @@ module Api
             end
 
             def show
-                puzzle = Puzzle.where(slug: params[:slug])
+                puzzle = Puzzle.puzzle_of_the_day
                 
                 render json: PuzzleSerializer.new(puzzle).serialized_json
             end
 
+            def daily
+                
+                render json: PuzzleSerializer.new(puzzle).serialized_json
+
+            end
 
             def create
                 puzzle = Puzzle.new(puzzle_params)

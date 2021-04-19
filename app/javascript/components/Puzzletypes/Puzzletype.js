@@ -5,17 +5,19 @@ import styled from 'styled-components'
 
 const PuzzleTableHeader = styled.div`
     text-align: center;
+    font-size: 48px;
+    font-decoration: bold;
 
 `
 
 const PuzzletypesTableSubheader = styled.div`
     text-align: center;
-    font-size: 
+    font-size: 24px;
 `
 
 const PuzzleTable = styled.div`
-    margin-left: 100px;
-    margin-right: 100px;
+    margin-left: 160px;
+    margin-right: 160px;
 
 `
 
@@ -47,7 +49,7 @@ const Puzzletype = () => {
     return (
         <PuzzleTable>
             <PuzzleTableHeader>
-                <h1>Sudoku Puzzles</h1>
+                Sudoku Puzzles
                     <PuzzletypesTableSubheader>
                         Choose from a variety of interactive sudoku puzzles, options for all skill levels
                     </PuzzletypesTableSubheader> 

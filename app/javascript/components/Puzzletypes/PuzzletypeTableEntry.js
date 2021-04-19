@@ -2,10 +2,6 @@ import React, {useState, useEffect, Fragment} from 'react'
 import { BrowserRouter as Router, Link } from 'react-router-dom'
 import axios from 'axios'
 import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Nav from 'react-bootstrap/Nav';
 import styled from 'styled-components'
 
 const PuzzleTypeHeaderRow = styled.tr`
@@ -22,6 +18,7 @@ const PuzzleTypeDescriptionRow = styled.tr`
 const PuzzleTypeDescriptionData = styled.td`
     border-bottom: 2px solid;
     border-color: black;
+    font-size: 18px;
 
 `
 

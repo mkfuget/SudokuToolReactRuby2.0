@@ -24,7 +24,8 @@ const CellStyle = styled(animated.td)`
     height: 36px;
     width: 36px;
     text-align: center;
-    text-decoration: ${props => props.underline};
+    text-decoration-line: ${props => props.underline};
+    text-decoration-thickness: ${props => props.thickness};
 
     &: first-child {
         border-left:solid medium gray;
@@ -34,31 +35,15 @@ const CellStyle = styled(animated.td)`
     }
 
 `
-
-const CellStyleConfirmed = styled(animated.td)`
-
-    border: 1px solid gray;
-    font-size: 16px;
-    height: 36px;
-    width: 36px;
-    text-align: center;
-    text-decoration: ${props => props.underline};
-    &: first-child {
-        border-left:solid medium gray;
-    }
-    &:nth-child(3n) {
-        border-right:solid medium gray;
-    }
-
-`
-
 
 const Cell = (props) => {
     const cellValue = parseInt(useSelector(state => state.boardDataReducer).data.boardData[props.index]) + 1;
     const flashColor = useSelector(state => state.cellStyleReducer).data.flashColor[props.index]
     const flashOn = useSelector(state => state.cellStyleReducer).data.flashOn[props.index]
     const isConfirmedSquare = useSelector(state => state.boardDataReducer).data.confirmedSquares[props.index]
-    const textDecoration = (isConfirmedSquare ? "underline" : "");
+    const textDecorationUnderline = (isConfirmedSquare ? "underline" : "");
+    const textDecorationThickness = (isConfirmedSquare ? "2px" : "1px");
+
     const currentSelectionIndex = useSelector(state => state.selectionReducer).index;
     const flashColorOut = 'rgba('+flashColor+', 0)';
     const flashColorIn = 'rgba('+flashColor+', 0.7)';
@@ -80,19 +65,19 @@ const Cell = (props) => {
         <Fragment>
         {flashOn 
             ? <CellStyle 
-                underline = {textDecoration}
+                underline = {textDecorationUnderline}
+                thickness = {textDecorationThickness}
                 style = {flashSquare}
                 onClick={() => selectCell(props.index)}
         >
             {cellValue!==0 ? (cellValue): ""}
             </CellStyle>
             : <CellStyle 
-                underline = {textDecoration}
-
+                underline = {textDecorationUnderline}
+                thickness = {textDecorationThickness}
                 style = {{
                     backgroundColor:backgroundColor,
-                }
-                }
+                }}
                 onClick={() => selectCell(props.index)}
             >
                 {cellValue!==0 ? (cellValue): ""}

@@ -15,10 +15,13 @@ const BOARD_WIDTH = 9;
 const SQUARE_WIDTH = 3;
 const BOARD_SQUARES = 81;
 
-console.log(window.location.href)
-sudokuStore.dispatch(Input.fetchBoardData(`/api/v1/puzzles/classic-easy-1`));
-
     const Puzzle = (props) =>{
+      sudokuStore.dispatch(Input.fetchBoardData(`/api/v1${props.match.url}`));
+      return (
+          <PuzzleInner/>
+      )
+    }
+    const PuzzleInner = (props) =>{
         const dispatch = useDispatch();
         const stateData = useSelector(state => state.boardDataReducer).data;
         const currentSelectionIndex = useSelector(state => state.selectionReducer).index;
@@ -44,7 +47,6 @@ sudokuStore.dispatch(Input.fetchBoardData(`/api/v1/puzzles/classic-easy-1`));
                  <Board 
                  />  
                  <button type="button" onClick = {()=>solvePuzzleHandler(stateData)} className="btn btn-primary" >Solve</button>
-                 <button type="button" className="btn btn-primary" >test Lights</button>
      
              </Fragment>
          )

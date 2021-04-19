@@ -1,46 +1,73 @@
 import React from 'react'
-import {Route, Switch, Fragment} from 'react-router-dom'
+
+import {Route, Switch, Link, Fragment} from 'react-router-dom'
 import Puzzletype from './Puzzletypes/Puzzletype'
 import Puzzle from './Puzzles/Puzzle'
 import Button from 'react-bootstrap/Button';
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
+import styled from 'styled-components'
 
 
 const App = () => {
     return (
         <React.Fragment>
             <HeaderPane/>
-            <Switch>
-                <Route exact path="/" component={Puzzletype}/>
-                <Route exact path="/puzzles/:slug" component={Puzzle}/>
+            <ConentWrapper>
+              <Switch>
+                  <Route exact path="/" component={Puzzletype}/>
+                  <Route exact path="/puzzles/:slug" component={Puzzle}/>
+                  <Route exact path="/dailypuzzle" component={Puzzle}/>
 
-            </Switch>
+              </Switch>
+            </ConentWrapper>
         </React.Fragment>
     )
 }
 
+const ConentWrapper = styled.div`
+  margin-top: 30px;
+`
+
+const NavList = styled.ul`
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #e3e4e6;
+    height: 48px;
+  
+
+`
+
+const NavEntry = styled.li`
+    float: left;
+    &:hover {
+      background-color: #cbcdd1;
+    }
+
+
+`
+
+const NavLink = styled(Link)`
+  display: block;
+  color: #7e7f82;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 18px;
+  &:hover {
+    text-decoration: none;
+  }
+
+
+`
 const HeaderPane = () => {
     return (
-        <Navbar bg="light" expand="lg">
-        <Navbar.Brand href="#home"></Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mr-auto">
-            <Nav.Link href="#home">Sudoku of the Day</Nav.Link>
-            <Nav.Link href="#link">View Puzzles</Nav.Link>
-            <Nav.Link href="#link">Create Custom Sudoku</Nav.Link>
-            <Nav.Link href="#link">View Puzzles</Nav.Link>
-          </Nav>
-          <Form inline>
-            <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-            <Button variant="outline-success">Search</Button>
-          </Form>
-        </Navbar.Collapse>
-      </Navbar>      
+        <NavList>
+            <NavEntry><NavLink to = "/puzzles/daily">Sudoku of the Day</NavLink></NavEntry>
+            <NavEntry><NavLink to = "/">View Puzzles</NavLink></NavEntry>
+
+        </NavList>
     )
 }
 export default App

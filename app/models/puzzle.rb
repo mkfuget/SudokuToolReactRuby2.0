@@ -6,7 +6,6 @@ class Puzzle < ApplicationRecord
     num_puzzles = Puzzle.all.count
     day_of_year = Date.today.yday
     puzzle_number = day_of_year%num_puzzles
-
     Puzzle.where(id: puzzle_number)
 
   end

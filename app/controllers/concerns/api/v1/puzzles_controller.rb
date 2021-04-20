@@ -12,17 +12,18 @@ module Api
                 render json: PuzzleSerializer.new(puzzles).serialized_json
             end
 
-            def show
-                puzzle = Puzzle.puzzle_of_the_day
-                
-                render json: PuzzleSerializer.new(puzzle).serialized_json
-            end
-
             def daily
+                puzzle = Puzzle.puzzle_of_the_day
+                render json: PuzzleSerializer.new(puzzle).serialized_json
+            end
+
+
+            def show
+                puzzle = Puzzle.where(slug: params[:slug])
                 
                 render json: PuzzleSerializer.new(puzzle).serialized_json
-
             end
+
 
             def create
                 puzzle = Puzzle.new(puzzle_params)

@@ -8,23 +8,31 @@
 puzzletypes = Puzzletype.create([
     {
         name: "Classic Easy",
+        ruleset: "Classic",
+        rules_description: "Each row, column and 3x3 square can only have one of each number 1-9",
         description: "Classic Sudoku Rules, each row column and square need to contain all of the numbers 1-9, thus any row, column or square cannot have two of the
         same number. Difficulty should be manageable for all users."
     },
     {
         name: "Classic Moderate",
+        ruleset: "Classic",
+        rules_description: "Each row, column and 3x3 square can only have one of each number 1-9",
         description:"Classic Sudoku Rules, each row column and square need to contain all of the numbers 1-9, thus any row, column or square cannot have two of the
         same number. An increased challenge for more intermediate Sudoku players."
 
     },
     {
         name: "Classic Hard",
+        ruleset: "Classic",
+        rules_description: "Each row, column and 3x3 square can only have one of each number 1-9",
         description:"Classic Sudoku Rules, each row column and square need to contain all of the numbers 1-9, thus any row, column or square cannot have two of the
         same number. Highest difficulty suitable for the most seasoned of users."
 
     },
     {
         name: "Cross Sudoku",
+        ruleset: "Cross",
+        rules_description: "Each row, column and 3x3 square can only have one of each number 1-9. In addition the two main diagonals must also have unique entries of 1-9.",
         description: "In addition to the classic sudoku rules, (each row column and square need to contain all of the numbers 1-9, thus any row, column or 
         square cannot have two of the same number) each main diagonal (top right square through bottom left square and top left square through bottom right square)
         Moderate difficulty puzzles with an additional restriction that can "
@@ -32,6 +40,9 @@ puzzletypes = Puzzletype.create([
     },
     {
         name: "Miracle Sudoku",
+        ruleset: "Miracle",
+        rules_description: "Each row, column and 3x3 square can only have one of each number 1-9. In addition adjacent squares and knight move squares must not have matching numbers, and directly adjacent (up, down left or right) cant be sequential numbers.",
+
         description: "In addition to the classic sudoku rules, (each row column and square need to contain all of the numbers 1-9, thus any row, column or 
         square cannot have two of the same number) you are prevented from placing matching numbers in any adjacent or diagonal adjacent squares, or squares that are 
         two moves away in one direction and one in another direction (like a chess knight move). Ruleset allows for a unique experience and solveable puzzles with a 

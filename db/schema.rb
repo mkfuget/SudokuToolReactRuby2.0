@@ -30,6 +30,8 @@ ActiveRecord::Schema.define(version: 2020_08_26_164319) do
     t.string "name"
     t.string "slug"
     t.string "description"
+    t.string "ruleset"
+    t.string "rules_description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

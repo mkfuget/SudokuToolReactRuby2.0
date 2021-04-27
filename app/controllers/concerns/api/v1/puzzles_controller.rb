@@ -14,14 +14,14 @@ module Api
 
             def daily
                 puzzle = Puzzle.puzzle_of_the_day
-                render json: PuzzleSerializer.new(puzzle).serialized_json
+                render json: PuzzleSerializer.new(puzzle, include: [:puzzletype]).serialized_json
             end
 
 
             def show
                 puzzle = Puzzle.where(slug: params[:slug])
                 
-                render json: PuzzleSerializer.new(puzzle).serialized_json
+                render json: PuzzleSerializer.new(puzzle, include: [:puzzletype]).serialized_json
             end
 
 

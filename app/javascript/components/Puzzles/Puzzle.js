@@ -21,6 +21,11 @@ const BOARD_SQUARES = 81;
           <PuzzleInner/>
       )
     }
+    const LayoutGrid = styled.div`
+      float: left;
+
+    `
+    
     const PuzzleInner = (props) =>{
         const dispatch = useDispatch();
         const stateData = useSelector(state => state.boardDataReducer).data;
@@ -44,9 +49,12 @@ const BOARD_SQUARES = 81;
         
          return (
              <Fragment>
-                 <Board 
-                 />  
-                 <button type="button" onClick = {()=>solvePuzzleHandler(stateData)} className="btn btn-primary" >Solve</button>
+              <div float="left">
+                <Board/>  
+              </div>
+              <div float="left">
+                <button type="button" onClick = {()=>solvePuzzleHandler(stateData)} className="btn btn-primary" >CHANGE Solve</button>
+              </div>
      
              </Fragment>
          )

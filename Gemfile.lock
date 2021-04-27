@@ -214,6 +214,7 @@ DEPENDENCIES
   capybara (>= 2.15)
   fast_jsonapi
   jbuilder (~> 2.7)
+  nokogiri
   pg
   puma (~> 4.1)
   rails (~> 6.0.3, >= 6.0.3.2)

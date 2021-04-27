@@ -16,6 +16,13 @@ export const fetchBoardData = (url) =>
             addBoard.addData(boardData);
             console.log(data);
             console.log(addBoard);
+<<<<<<< Updated upstream
+            console.log("F THIS");
+
+            //dispatch(Action.LOAD_PUZZLE_DATA(boardToStoreHash(addBoard)))
+=======
+            console.log("addBoard");
+>>>>>>> Stashed changes
 
             dispatch(Action.UPDATE_BOARD(boardToStoreHash(addBoard)))
         }

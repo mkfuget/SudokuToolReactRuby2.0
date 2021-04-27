@@ -44,9 +44,8 @@ const BOARD_SQUARES = 81;
         
          return (
              <Fragment>
-                 <Board 
-                 />  
-                 <button type="button" onClick = {()=>solvePuzzleHandler(stateData)} className="btn btn-primary" >Solve</button>
+                <Board/>  
+                <button type="button" onClick = {()=>solvePuzzleHandler(stateData)} className="btn btn-primary" >CHANGE Solve</button>
      
              </Fragment>
          )

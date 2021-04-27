@@ -51,7 +51,7 @@ module Api
             private 
 
             def puzzletype_params
-                params.require(:puzzletype).permit(:name, :description)
+                params.require(:puzzletype).permit(:name, :description, :ruleset, :rules_description)
             end
 
             def options

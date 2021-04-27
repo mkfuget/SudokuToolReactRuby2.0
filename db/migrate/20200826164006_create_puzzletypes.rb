@@ -5,8 +5,6 @@ class CreatePuzzletypes < ActiveRecord::Migration[6.0]
       t.string :slug
       t.string :description
       t.string :ruleset
-      t.string :rules_description
-
       t.timestamps
     end
   end

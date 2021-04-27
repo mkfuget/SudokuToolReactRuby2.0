@@ -16,6 +16,8 @@ export const fetchBoardData = (url) =>
             addBoard.addData(boardData);
             console.log(data);
             console.log(addBoard);
+            console.log("F THIS");
+
             //dispatch(Action.LOAD_PUZZLE_DATA(boardToStoreHash(addBoard)))
 
             dispatch(Action.UPDATE_BOARD(boardToStoreHash(addBoard)))
